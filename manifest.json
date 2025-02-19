@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Tinder Match Counter",
+  "version": "1.0",
+  "description": "Count your Tinder matches",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["activeTab", "tabs", "scripting", "storage"],
+  "host_permissions": ["https://tinder.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://tinder.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
