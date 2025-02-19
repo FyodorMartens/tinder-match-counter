@@ -2,8 +2,6 @@
 
 A simple Chrome extension that counts your Tinder matches and optionally highlights them for verification. Perfect for those curious about their total match count!
 
-![Tinder Match Counter Screenshot](screenshots/screenshot.png)
-
 ## Features
 
 - 🔢 Accurately counts all your Tinder matches
