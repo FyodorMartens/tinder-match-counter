@@ -25,5 +25,9 @@
       "matches": ["https://tinder.com/*"],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "web_accessible_resources": [{
+    "resources": ["icons/qr.png"],
+    "matches": ["https://tinder.com/*"]
+  }]
 }
