@@ -10,20 +10,55 @@
     .header {
       text-align: center;
       margin-bottom: 15px;
+      position: relative;
     }
     .header img {
       width: 32px;
       height: 32px;
     }
-    .count-container {
-      margin-bottom: 15px;
-      font-size: 16px;
-      font-weight: 500;
+    .refresh-icon {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      width: 8px;
+      height: 8px;
+      padding: 1px;
+      border-radius: 50%;
+      transition: all 0.2s;
+      opacity: 0.7;
     }
-    .counting {
-      font-size: 12px;
+    .refresh-icon:hover {
+      background-color: #fd506810;
+      opacity: 1;
+    }
+    .refresh-icon.spinning {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: translateY(-50%) rotate(360deg); }
+    }
+    .count-container {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #fff;
+      border: 2px solid #fd5068;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .count-label {
+      display: block;
       color: #666;
-      font-style: italic;
+      font-size: 12px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    #matchCount {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fd5068;
     }
     .button-container {
       margin-bottom: 12px;
@@ -46,14 +81,25 @@
       background-color: #fd506880;
       cursor: not-allowed;
     }
+    .small-button {
+      font-size: 12px;
+      padding: 6px;
+      text-align: center;
+      background-color: transparent;
+      border: 1px solid #fd5068;
+      color: #fd5068;
+    }
+    .small-button:hover {
+      background-color: #fd506810;
+    }
     .toggle-container {
       display: flex;
       align-items: center;
-      margin-bottom: 8px;
+      justify-content: center;
+      margin: 12px 0;
     }
     input[type="checkbox"] {
-      margin-right: 8px;
-      cursor: pointer;
+      display: none;
     }
     label {
       cursor: pointer;
@@ -64,9 +110,6 @@
       font-size: 12px;
       margin-top: 8px;
     }
-    #matchCount {
-      font-weight: bold;
-    }
     .footer {
       margin-top: 15px;
       padding-top: 10px;
@@ -74,36 +117,44 @@
       font-size: 12px;
     }
     .coffee-link {
-      display: flex;
-      align-items: center;
-      color: inherit;
+      display: inline-block;
+      color: #666;
       text-decoration: none;
       cursor: pointer;
+      font-size: 12px;
+      padding: 6px 12px;
+      transition: color 0.2s;
     }
     .coffee-link:hover {
       color: #fd5068;
+    }
+    .coffee-link::after,
+    .coffee-link::before {
+      content: none;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <img src="icons/icon32.png" alt="Tinder Match Counter">
+    <!-- Empty header, or we could remove it entirely if not needed -->
   </div>
   <div class="count-container">
-    Matches: <span id="matchCount">0</span>
+    <span class="count-label">Matches</span>
+    <span id="matchCount">0</span>
   </div>
   <div class="button-container">
     <button id="refreshButton">Calculate matches</button>
   </div>
   <div class="toggle-container">
-    <input type="checkbox" id="highlightToggle">
-    <label for="highlightToggle">Show me proof</label>
+    <button class="small-button" id="proofButton">Show me proof</button>
   </div>
   <div id="error"></div>
   <div class="footer">
     <div class="toggle-container">
-      <input type="checkbox" id="coffeeCheckbox" style="visibility: hidden;">
-      <label class="coffee-link" id="coffeeLink">Buy me a coffee ☕</label>
+      <label class="coffee-link" id="coffeeLink">Buy me a coffee</label>
+    </div>
+    <div id="qrContainer" style="display: none; text-align: center; margin-top: 10px;">
+      <img id="qrCode" src="icons/qr.png" alt="Donation QR Code" style="width: 150px; height: 150px;">
     </div>
   </div>
   <script src="popup.js"></script>
