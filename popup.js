@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const matchCount = document.getElementById('matchCount');
     const error = document.getElementById('error');
-    const highlightToggle = document.getElementById('highlightToggle');
     const refreshButton = document.getElementById('refreshButton');
     
     let lastValidCount = 0;
@@ -11,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (result.lastMatchCount) {
             lastValidCount = result.lastMatchCount;
             matchCount.textContent = result.lastMatchCount;
+            refreshButton.textContent = "Count matches again";
         }
     });
     
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     currentTab.id, 
                     { 
                         action: "getMatchCount",
-                        highlight: highlightToggle.checked,
+                        highlight: false,
                         autoScroll: true  // Always auto-scroll when calculating
                     }
                 );
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update display
                 matchCount.textContent = lastValidCount;
                 refreshButton.disabled = false;
-                refreshButton.textContent = "Calculate matches";
+                refreshButton.textContent = "Count matches again";
                 error.textContent = '';
             }
             else if (request.status === "error") {
@@ -73,19 +73,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     refreshButton.addEventListener('click', refreshCount);
-    highlightToggle.addEventListener('change', () => {
+    
+    // Replace highlight toggle with button
+    const proofButton = document.getElementById('proofButton');
+    proofButton.addEventListener('click', () => {
+        const isHighlighted = proofButton.classList.contains('active');
+        if (isHighlighted) {
+            proofButton.classList.remove('active');
+            proofButton.style.backgroundColor = 'transparent';
+            proofButton.style.color = '#fd5068';
+        } else {
+            proofButton.classList.add('active');
+            proofButton.style.backgroundColor = '#fd5068';
+            proofButton.style.color = 'white';
+        }
+        
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.sendMessage(
                 tabs[0].id, 
                 { 
                     action: "getMatchCount",
-                    highlight: highlightToggle.checked,
-                    autoScroll: false  // Don't auto-scroll for highlight toggle
+                    highlight: !isHighlighted,
+                    autoScroll: false
                 }
             );
         });
     });
-    
+
     // Initial highlight state check
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         if (tabs[0].url.includes('tinder.com')) {
@@ -93,15 +107,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 tabs[0].id, 
                 { 
                     action: "getMatchCount",
-                    highlight: highlightToggle.checked,
+                    highlight: false,
                     autoScroll: false
                 }
             );
         }
     });
 
-    // Add coffee link handler
+    // Update coffee link handler
     document.getElementById('coffeeLink').addEventListener('click', function() {
-        chrome.tabs.create({ url: 'https://x.com' });
+        const qrContainer = document.getElementById('qrContainer');
+        if (qrContainer.style.display === 'none') {
+            qrContainer.style.display = 'block';
+        } else {
+            qrContainer.style.display = 'none';
+        }
     });
 });
